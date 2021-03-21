@@ -1,27 +1,47 @@
 package ro.fasttrackit.tema3.ex3;
 
-import java.time.LocalTime;
+import java.time.Duration;
 import java.util.Objects;
 
 public class Subscription {
-    private final GymMember gymMember;
-    private LocalTime time;
+    private GymMember gymMember;
+    private Duration expireDate;
+    private TimeCategory timeCategory;
+
+    public Subscription() {
+    }
 
     public Subscription(GymMember gymMember) {
         this.gymMember = gymMember;
-        this.time = LocalTime.of(30, 0);
+        this.expireDate = Duration.ofHours(30);
+        changeTimeCategory();
     }
 
     public GymMember getGymMember() {
         return gymMember;
     }
 
-    public LocalTime getTime() {
-        return time;
+    public Duration getExpireDate() {
+        return expireDate;
     }
 
-    public void setTime(LocalTime time) {
-        this.time = time;
+    public TimeCategory getTimeCategory() {
+        return timeCategory;
+    }
+
+    public void setExpireDate(Duration expireDate) {
+        this.expireDate = expireDate;
+        changeTimeCategory();
+    }
+
+    private void changeTimeCategory() {
+        if (this.expireDate.toHours() < 10) {
+            this.timeCategory = TimeCategory.RED;
+        } else if (this.expireDate.toHours() < 30) {
+            this.timeCategory = TimeCategory.YELLOW;
+        } else {
+            this.timeCategory = TimeCategory.GREEN;
+        }
     }
 
     @Override
@@ -29,19 +49,19 @@ public class Subscription {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subscription that = (Subscription) o;
-        return Objects.equals(gymMember, that.gymMember) && Objects.equals(time, that.time);
+        return Objects.equals(gymMember, that.gymMember) && Objects.equals(expireDate, that.expireDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(gymMember, time);
+        return Objects.hash(gymMember, expireDate);
     }
 
     @Override
     public String toString() {
         return "Subscription{" +
                 "gymMember=" + gymMember +
-                ", time=" + time +
+                ", time=" + expireDate +
                 '}';
     }
 }
